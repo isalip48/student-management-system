@@ -21,7 +21,8 @@ export default function AddStudent() {
   const router = useRouter();
 
   const [fileInputState, setFileInputState] = useState('');
-  const [previewSource, setPreviewSource] = useState();
+  const [previewSource, setPreviewSource] = useState<string | null>(null);
+
   const [selectedFile, setSelectedFile] = useState('');
 
   // role checking
@@ -49,9 +50,12 @@ export default function AddStudent() {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setPreviewSource(reader.result);
+      if (reader.result) {
+        setPreviewSource(reader.result as string);
+      }
     };
   };
+  
 
   const handleSubmitFile = (e: any) => {
     e.preventDefault();
@@ -93,7 +97,7 @@ export default function AddStudent() {
   });
 
   const [degree, setDegree] = useState('');
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState<{ modCode: string; modName: string }[]>([]);
 
   const degList = [
     { key: 'IT', deg: 'IT' },
@@ -118,36 +122,42 @@ export default function AddStudent() {
     }
   }, [degree]); // Fetch modules  the degree changes
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
     event.preventDefault();
     try {
+      // Copying form data
       let user = { ...formData };
-
+  
+      // Creating student data object
       const studentData = {
         image: localStorage.getItem('imgId'),
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        nicNo: formData.nicNo,
-        dob: formData.dob,
-        regNo: formData.regNo,
-        kduEmail: formData.kduEmail,
-        phoneNo: formData.phoneNo,
-        stuAddress: formData.stuAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        nicNo: user.nicNo,
+        dob: user.dob,
+        regNo: user.regNo,
+        kduEmail: user.kduEmail,
+        phoneNo: user.phoneNo,
+        stuAddress: user.stuAddress,
         degreeProgram: degree,
-        intake: formData.intake,
-        semester: formData.semester,
-        courses: modules.map((module) => module.modCode), // Include the module codes
-      };
+        intake: user.intake,
+        semester: user.semester,
+        courses: (modules as { modCode: string }[]).map((module) => module.modCode),
 
+      };
+  
+      // Sending student data to the server
       const response = await axios.post(
         'http://localhost:5030/api/student/',
         studentData
       );
+  
       console.log('Form data sent successfully:', response.data);
-      alert('student added successfully');
+      alert('Student added successfully');
       localStorage.setItem('imgId', '');
-
-      // Reset form data after successful submission
+  
+      // Resetting form data after successful submission
       setFormData({
         image: '',
         firstName: '',
@@ -167,11 +177,11 @@ export default function AddStudent() {
       console.error('Error sending form data:', error);
     }
   };
-
-  const handleChange = (e) => {
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  
   return (
     <div className="w-full h-screen overflow-y-scroll overscroll-contain">
       <NavAdmin />
@@ -206,9 +216,10 @@ export default function AddStudent() {
                       aria-label="Take a photo"
                       className="absolute bottom-8 right-0 cursor-pointer"
                     >
-                      <label for="img-upload">
-                        <CameraIcon />
-                      </label>
+                      <label htmlFor="img-upload">
+                        
+                        </label>
+                      
                     </Button>
                   </div>
                   <input
@@ -362,19 +373,19 @@ export default function AddStudent() {
                       }
                     >
                       <SelectItem key="Intake 01" value="Intake 01">
-                        Intake 01
+                        Intake 39
                       </SelectItem>
                       <SelectItem key="Intake 02" value="Intake 02">
-                        Intake 02
+                        Intake 40
                       </SelectItem>
                       <SelectItem key="Intake 03" value="Intake 03">
-                        Intake 03
+                        Intake 41
                       </SelectItem>
                     </Select>
                   </div>
                   <div className="w-full lg:w-[2  5%]">
                     <Select
-                      label="Intake"
+                      label="Semester"
                       className="w-full"
                       variant="bordered"
                       isRequired
@@ -386,12 +397,12 @@ export default function AddStudent() {
                       <SelectItem key="Semester 01" value="Semester 01">
                         Semester 01
                       </SelectItem>
-                      {/* <SelectItem key="2" value="Semester 02">
+                       <SelectItem key="2" value="Semester 02">
                         Semester 02
                       </SelectItem>
                       <SelectItem key="3" value="Semester 03">
                         Semester 03
-                      </SelectItem> */}
+                      </SelectItem> 
                     </Select>
                   </div>
                 </div>

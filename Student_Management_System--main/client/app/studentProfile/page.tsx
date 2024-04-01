@@ -58,9 +58,16 @@ export default function Profile() {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
-      setPreviewSource(reader.result);
+      if (reader.result !== null) {
+        setPreviewSource(reader.result as string);
+      } else {
+        setPreviewSource(undefined); // Handle null case
+      }
     };
   };
+  
+  
+  
 
   const handleSubmitFile = (e: any) => {
     e.preventDefault();
@@ -117,7 +124,7 @@ export default function Profile() {
     getProfileData();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProfileData({ ...profileData, [name]: value });
   };
@@ -129,8 +136,9 @@ export default function Profile() {
     day: 'numeric'
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
       const dataToSend = {
         ...profileData,
@@ -194,8 +202,8 @@ export default function Profile() {
                       aria-label="Take a photo"
                       className="absolute bottom-8 right-0 cursor-pointer"
                     >
-                      <label for="img-upload">
-                        <CameraIcon />
+                      <label htmlFor="img-upload">
+                        
                       </label>
                     </Button>
                   </div>

@@ -48,16 +48,17 @@ export default function Signup() {
       );
       localStorage.setItem('Name', adminFormData.Name);
       const queryObject = {
-        admin: true,
+        admin: 'true',
       };
       const queryString = new URLSearchParams(queryObject).toString();
       router.push(`/auth/signin/?${queryString}`);
-
+  
       console.log(response.data);
     } catch (error) {
       console.error('Error signing in:', error);
     }
   };
+  
 
   return (
     <div className="w-full relative h-screen overflow-y-scroll overscroll-contain">

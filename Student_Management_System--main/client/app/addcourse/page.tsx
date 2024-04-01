@@ -29,45 +29,46 @@ export default function AddCourse() {
     modName: '',
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        'http://localhost:5030/api/course/',
-        formData
-      );
-      if (response.status === 200) {
-        console.log('Course added successfully!');
-        alert('course added successfully!');
-      } else {
-        console.error('Failed to add course');
-      }
-    } catch (error) {
-      console.error('Error adding course:', error);
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      'http://localhost:5030/api/course/',
+      formData
+    );
+    if (response.status === 200) {
+      console.log('Course added successfully!');
+      alert('course added successfully!');
+    } else {
+      console.error('Failed to add course');
     }
-  };
+  } catch (error) {
+    console.error('Error adding course:', error);
+  }
+};
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+};
+
 
   const semList = [
-    { key: 'Y1S1', sem: 'Y1S1' },
-    { key: 'Y1S2', sem: 'Y1S2' },
-    { key: 'Y2S1', sem: 'Y2S1' },
-    { key: 'Y2S2', sem: 'Y2S2' },
-    { key: 'Y3S1', sem: 'Y3S1' },
-    { key: 'Y3S2', sem: 'Y3S2' },
-    { key: 'Y4S1', sem: 'Y4S1' },
-    { key: 'Y4S2', sem: 'Y4S2' },
+    { key: 'Y1S1', sem: 'Semester 01' },
+    { key: 'Y1S2', sem: 'Semester 02' },
+    { key: 'Y2S1', sem: 'Semester 03' },
+    { key: 'Y2S2', sem: 'Semester 04' },
+    { key: 'Y3S1', sem: 'Semester 05' },
+    { key: 'Y3S2', sem: 'Semester 06' },
+    { key: 'Y4S1', sem: 'Semester 07' },
+    { key: 'Y4S2', sem: 'Semseter 08' },
   ];
 
   const degList = [
     { key: 'IT', deg: 'IT' },
     { key: 'SE', deg: 'SE' },
-    { key: 'DS', deg: 'DS' },
+    { key: 'DS', deg: 'CE' },
     { key: 'CS', deg: 'CS' },
-    { key: 'IM', deg: 'IM' },
+    { key: 'IM', deg: 'DBA' },
   ];
 
   return (

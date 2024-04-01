@@ -52,9 +52,10 @@ export default function Signup() {
     });
   };
 
-  const handleChange = (e) => {
+  const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  
 
   const degList = ['IT', 'SE', 'DS', 'CS', 'IM'];
 
@@ -149,21 +150,21 @@ export default function Signup() {
                 />
               </div>
               <div>
-                <Select
-                  label="Degree program"
-                  className="w-full"
-                  variant="bordered"
-                  isRequired
-                  name="degree"
-                  onChange={handleChange}
-                  value={formData.degree}
-                >
-                  {degList.map((deg) => (
-                    <SelectItem key={deg} value={deg}>
-                      {deg}
-                    </SelectItem>
-                  ))}
-                </Select>
+              <Select
+                    label="Degree program"
+                    className="w-full"
+                    variant="bordered"
+                    isRequired
+                    name="degree"
+                    onChange={handleChangeSelect}
+                    value={formData.degree}
+                  >
+                    {degList.map((deg) => (
+                      <SelectItem key={deg} value={deg}>
+                        {deg}
+                      </SelectItem>
+                    ))}
+                  </Select>
               </div>
 
               <div>

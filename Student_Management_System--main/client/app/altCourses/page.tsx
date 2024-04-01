@@ -36,7 +36,7 @@ const AlterCourses = () => {
   const [degreeProgram, setDegreeProgram] = useState('');
   const [intake, setIntake] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState<{ modCode: string; modName: string }[]>([]);
 
   useEffect(() => {
     // Extract query parameters from window.location.search
@@ -84,7 +84,7 @@ const AlterCourses = () => {
     }
   }, [selectedSemester, degreeProgram]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=> {
     e.preventDefault();
 
     try {
@@ -101,7 +101,7 @@ const AlterCourses = () => {
         degreeProgram,
         intake,
         semester: selectedSemester,
-        courses: modules.map((module) => module.modCode)
+        courses: (modules as { modCode: string }[]).map((module) => module.modCode),
       });
 
       // Handle success

@@ -46,7 +46,13 @@ export default function StudentList() {
   const [degreeProgram, setDegreeProgram] = useState('');
   const [intake, setIntake] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState<Module[]>([]);
+
+  interface Module {
+    modName: string;
+    modCode: string;
+    // Add other properties if needed
+  }
 
   useEffect(() => {
     // Extract query parameters from window.location.search
@@ -99,7 +105,7 @@ export default function StudentList() {
     }
   }, [selectedSemester, degreeProgram]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -119,7 +125,7 @@ export default function StudentList() {
   };
 
 
-  const handleSearch = async (e) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.get(`http://localhost:5030/api/student/${registerNo}`);
